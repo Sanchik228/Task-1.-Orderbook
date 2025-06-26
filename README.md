@@ -1,5 +1,22 @@
 # Task#1. Orderbook
 
+Efficiency Explanation
+
+Matching Algorithm:
+You use std::priority_queue to manage buy and sell orders:
+buyOrders: Max-heap (orders with the highest price have priority).
+sellOrders: Min-heap (orders with the lowest price have priority).
+This ensures that the best possible match is always at the top of each queue, making it fast to find a matching pair.
+
+Order Matching Logic:
+You process each incoming order by checking the top of the opposite side's priority queue.
+You do not scan all orders — just compare the top elements and pop/push as needed.
+Matching happens in a greedy and local fashion, which is efficient.
+
+Order Insertions and Deletions:
+Priority queues provide O(log n) complexity for both insertion and removal.
+You may perform several such operations per order, but only as many as required to fulfill that order.
+
 After launching the program, you need to enter buyers and sellers according to the following principle. 
 The first number is the buyer/seller indicator. 
 The second number is how many UAH we want to sell or buy. 
