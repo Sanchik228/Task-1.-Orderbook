@@ -11,11 +11,11 @@ const bool SELL = false;
 struct Order {
 	int user_id;
 	int amount;
-	int prise;
+	int price;
 	bool side;
 
 	Order(int uID, int amt, int pri, bool sd)
-		: user_id(uID), amount(amt), prise(pri), side(sd) {}
+		: user_id(uID), amount(amt), price(pri), side(sd) {}
 };
 
 struct BalanceChange {
@@ -25,37 +25,37 @@ struct BalanceChange {
 
 	void print() const {
 		std::cout << "BalanceChange{user_id: " << user_id << ", value: " << value
-			<< ", currency: " << currency << std::endl;
+			<< ", currency: " << currency << "}" << std::endl;
 	}
 };
 
-struct BuyCompere {
+struct BuyCompare {
 	bool operator() (const Order& a, const Order& b) {
-		return a.prise < b.prise;
+		return a.price < b.price;
 	}
 };
 
-struct SellCompere {
+struct SellCompare {
 	bool operator() (const Order& a, const Order& b) {
-		return a.prise > b.prise;
+		return a.price > b.price;
 	}
 };
 
 class Orderbook {
 private:
-	std::priority_queue<Order, std::vector<Order>, BuyCompere> buyOrders;
-	std::priority_queue<Order, std::vector<Order>, SellCompere> sellOrders;
+	std::priority_queue<Order, std::vector<Order>, BuyCompare> buyOrders;
+	std::priority_queue<Order, std::vector<Order>, SellCompare> sellOrders;
 
 	void matchBuy(Order buyOrder) {
 		while (!sellOrders.empty() && buyOrder.amount > 0 
-			&& sellOrders.top().prise >= buyOrder.prise) {
+			&& sellOrders.top().price <= buyOrder.price) {
 			Order sellOrder = sellOrders.top();
 			sellOrders.pop();
 
 			int tradedAmount = std::min(buyOrder.amount, sellOrder.amount);
-			int tradePrise = sellOrder.prise;
+			int tradeprice = sellOrder.price;
 
-			int USD = tradedAmount * tradePrise;
+			int USD = tradedAmount * tradeprice;
 
 			std::cout << "Trade executed:\n";
 			BalanceChange{ buyOrder.user_id, -USD, "USD" }.print();
@@ -68,7 +68,7 @@ private:
 			sellOrder.amount -= tradedAmount;
 
 			if (sellOrder.amount > 0) {
-				sellOrders.push(sellOrder); // повертаємо залишок
+				sellOrders.push(sellOrder);
 			}
 		}
 		if (buyOrder.amount > 0) {
@@ -77,14 +77,14 @@ private:
 	}
 	void matchSell(Order sellOrder) {
 		while (!buyOrders.empty() && sellOrder.amount > 0
-			&& buyOrders.top().prise >= sellOrder.prise) {
+			&& buyOrders.top().price >= sellOrder.price) {
 			Order buyOrder = buyOrders.top();
 			buyOrders.pop();
 
 			int tradedAmount = std::min(sellOrder.amount, buyOrder.amount);
-			int tradePrise = buyOrder.prise;
+			int tradeprice = buyOrder.price;
 
-			int USD = tradedAmount * tradePrise;
+			int USD = tradedAmount * tradeprice;
 
 			std::cout << "Trade executed:\n";
 			BalanceChange{ sellOrder.user_id, -USD, "USD" }.print();
@@ -97,7 +97,7 @@ private:
 			buyOrder.amount -= tradedAmount;
 
 			if (buyOrder.amount > 0) {
-				buyOrders.push(sellOrder); // повертаємо залишок
+				buyOrders.push(buyOrder);
 			}
 		}
 		if (sellOrder.amount > 0) {
@@ -126,9 +126,11 @@ int main() {
 	std::cout << std::endl;
 
 	std::string line;
-	while (line != "exit") {
+	while (true) {
 		std::cout << "> ";
 		std::getline(std::cin, line);
+		if (line == "exit") break;
+		std::cout << std::endl;
 
 		std::istringstream iss(line);
 		int uid, amt, pri;
