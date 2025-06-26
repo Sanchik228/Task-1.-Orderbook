@@ -115,6 +115,10 @@ public:
 	}
 };
 
+bool writeSide(const std::string& s) {
+	return s == "buy" || s == "Buy" || s == "BUY";
+}
+
 int main() {
 	Orderbook book;
 
@@ -135,6 +139,7 @@ int main() {
 			continue;
 		}
 
+		bool side = writeSide(sideStr);
 		book.addOrder(Order(uid, amt, pri, side));
 	}
 
