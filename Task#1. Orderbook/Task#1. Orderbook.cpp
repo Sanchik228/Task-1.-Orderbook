@@ -130,6 +130,7 @@ int main() {
 		std::cout << "> ";
 		std::getline(std::cin, line);
 		if (line == "exit") break;
+		std::cout << std::endl;
 
 		std::istringstream iss(line);
 		int uid, amt, pri;
