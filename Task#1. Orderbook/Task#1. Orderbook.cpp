@@ -121,7 +121,6 @@ bool writeSide(const std::string& s) {
 
 int main() {
 	Orderbook book;
-	std::vector<Order> pendingOrders;
 
 	std::cout << "Enter orders (user_id amount price side), e.g. '1 100 28 buy'. Type 'exit' to quit.";
 	std::cout << std::endl;
@@ -131,6 +130,7 @@ int main() {
 		std::cout << "> ";
 		std::getline(std::cin, line);
 		if (line == "exit") break;
+		std::cout << std::endl;
 
 		std::istringstream iss(line);
 		int uid, amt, pri;
@@ -142,11 +142,7 @@ int main() {
 		}
 
 		bool side = writeSide(sideStr);
-		pendingOrders.emplace_back(Order(uid, amt, pri, side));
-	}
-	std::cout << "\nMatching orders...\n";
-	for (const Order& order : pendingOrders) {
-		book.addOrder(order);
+		book.addOrder(Order(uid, amt, pri, side));
 	}
 
 	return 0;
