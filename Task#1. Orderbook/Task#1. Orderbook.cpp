@@ -24,8 +24,8 @@ struct BalanceChange {
 	std::string currency;
 
 	void print() const {
-		std::cout << "BalanceChange{user_id: " << user_id << ", value: " << value
-			<< ", currency: " << currency << std::endl;
+		std::cout << "BalanceChange {user_id: " << user_id << ", value: " << value
+			<< ", currency: " << currency << "}" << std::endl;
 	}
 };
 
