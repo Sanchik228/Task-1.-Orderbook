@@ -116,7 +116,27 @@ public:
 };
 
 int main() {
+	Orderbook book;
 
+	std::cout << "Enter orders (user_id amount price side), e.g. '1 100 28 buy'. Type 'exit' to quit.";
+	std::cout << std::endl;
+
+	std::string line;
+	while (line != "exit") {
+		std::cout << "> ";
+		std::getline(std::cin, line);
+
+		std::istringstream iss(line);
+		int uid, amt, pri;
+		std::string sideStr;
+
+		if (!(iss >> uid >> amt >> pri >> sideStr)) {
+			std::cerr << "Invalid input format.\n";
+			continue;
+		}
+
+		book.addOrder(Order(uid, amt, pri, side));
+	}
 
 	return 0;
 }
