@@ -10,7 +10,16 @@ struct Order {
 		: user_id(uID), amount(amt), prise(pri), side(sd) {}
 };
 
+struct BalanceChange {
+	int user_id;
+	int value;
+	std::string currency;
 
+	void print() const {
+		std::cout << "BalanceChange{user_id: " << user_id << ", value: " << value
+			<< ", currency: " << currency << std::endl;
+	}
+};
 
 int main() {
 
