@@ -126,9 +126,10 @@ int main() {
 	std::cout << std::endl;
 
 	std::string line;
-	while (line != "exit") {
+	while (true) {
 		std::cout << "> ";
 		std::getline(std::cin, line);
+		if (line == "exit") break;
 
 		std::istringstream iss(line);
 		int uid, amt, pri;
